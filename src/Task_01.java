@@ -41,7 +41,8 @@ public class Task_01 {
                     break;
                 }
                 default:{
-                    System.err.println("INVALID SEQUENCE TYPE\nAVAILABLE OPTIONS: " +
+                    System.err.println("INVALID SEQUENCE TYPE" +
+                            "\nAVAILABLE OPTIONS: " +
                             "FIB, PRIME, FACTORIAL");
                     type = scanner.nextLine();
                     type = type.toUpperCase();
@@ -65,14 +66,28 @@ class Sequence implements IExecutable{
         int target = scanner.nextInt();
         BigInteger n1 = BigInteger.ZERO;
         BigInteger n2 = BigInteger.ONE;
-        System.out.println(n1);
-        System.out.println(n2);
-        BigInteger n3;
-        for (int i = 0; i < target-2; i++) {
-            n3 = n1.add(n2);
-            n1 = n2;
-            n2 = n3;
-            System.out.println(n3);
+        switch (target){
+            case 0: break;
+            case 1: {
+                System.out.println(n1);
+                break;
+            }
+            case 2: {
+                System.out.println(n1);
+                System.out.println(n2);
+                break;
+            }
+            default:{
+                System.out.println(n1);
+                System.out.println(n2);
+                BigInteger n3;
+                for (int i = 0; i < target-2; i++) {
+                    n3 = n1.add(n2);
+                    n1 = n2;
+                    n2 = n3;
+                    System.out.println(n3);
+                }
+            }
         }
     }
     private void primes_sequence(){
