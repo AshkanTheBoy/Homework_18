@@ -21,9 +21,12 @@ public class Task_02 {
 
     public static void main(String[] args) {
         new ShapesList();
-        ShapesList.getShapes().forEach(IRoundable::calculateArea);
+        for (IRoundable shape: ShapesList.getShapes()){
+            shape.calculateArea();
+        }
         double allAreas = 0;
         for (IRoundable shape: ShapesList.getShapes()){
+            System.out.println(shape.getArea());
             allAreas+= shape.getArea();
         }
 
@@ -54,15 +57,15 @@ class ShapesList{
             int target = scanner.nextInt();
             switch (target){
                 case 1:{
-                    new Roundable(new Square());
+                    ShapesList.getShapes().add(new Roundable(new Square()));
                     break;
                 }
                 case 2:{
-                    new Roundable(new Triangle());
+                    ShapesList.getShapes().add(new Roundable(new Triangle()));
                     break;
                 }
                 case 3:{
-                    new Roundable(new Circle());
+                    ShapesList.getShapes().add(new Roundable(new Circle()));
                     break;
                 }
                 case 4:{
@@ -95,10 +98,9 @@ class Square implements IRoundable{
     public Square() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the height of the square");
-        this.height = scanner.nextInt();
+        this.height = scanner.nextDouble();
         System.out.println("Enter the width of the square");
-        this.width = scanner.nextInt();
-        ShapesList.shapes.add(this);
+        this.width = scanner.nextDouble();
     }
     @Override
     public double getArea() {
@@ -138,18 +140,17 @@ class Triangle implements IRoundable{
         double[] sides = new double[3];
         while (status){
             System.out.println("Side 1");
-            this.side1 = scanner.nextInt();
+            this.side1 = scanner.nextDouble();
             sides[0] = side1;
             System.out.println("Side 2");
-            this.side2 = scanner.nextInt();
+            this.side2 = scanner.nextDouble();
             sides[1] = side2;
             System.out.println("Side 3");
-            this.side3 = scanner.nextInt();
+            this.side3 = scanner.nextDouble();
             sides[2] = side3;
             Arrays.sort(sides);
             if (sides[0]+sides[1]>sides[2]){
                 status = false;
-                ShapesList.shapes.add(this);
             } else {
                 System.err.println("CANNOT CREATE TRIANGLE WITH GIVEN SIDES. TRY AGAIN");
             }
@@ -189,8 +190,7 @@ class Circle implements IRoundable{
     public Circle() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the radius of the circle");
-        this.radius = scanner.nextInt();
-        ShapesList.shapes.add(this);
+        this.radius = scanner.nextDouble();
     }
     @Override
     public double getArea() {
@@ -212,6 +212,7 @@ class Circle implements IRoundable{
 }
 
 class Roundable implements IRoundable{
+    private double area;
     protected IRoundable shape;
     public Roundable(IRoundable shape) {
         this.shape = shape;
@@ -222,28 +223,38 @@ class Roundable implements IRoundable{
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose rounding mode: " +
                 "\n1-Do not round" +
-                "\n2-Round up to nearest natural number" +
-                "\n3-Round down to nearest natural number" +
-                "\n4-Round to desirable decimal places");
+                "\n2-Round up to the nearest natural number" +
+                "\n3-Round down to the nearest natural number" +
+                "\n4-Round to the number of required decimal places");
         int answer = scanner.nextInt();
         shape.calculateArea();
         double area = shape.getArea();
+        System.out.printf("area is: %f\n",area);
         switch (answer){
             case 1:{
+                this.area = area;
                 break;
             }
             case 2:{
                 area = Math.ceil(area);
                 shape.setArea(area);
+                this.area = area;
+                System.out.println(shape.getArea());
+                break;
             }
             case 3:{
                 area = Math.floor(area);
                 shape.setArea(area);
+                this.area = area;
+                System.out.println(shape.getArea());
+                break;
             }
             case 4:{
                 System.out.println("Number of places to round to: ");
                 answer = scanner.nextInt();
                 shape.setArea(round(shape.getArea(),answer));
+                this.area = shape.getArea();
+                System.out.println(shape.getArea());
             }
         }
     }
@@ -258,11 +269,16 @@ class Roundable implements IRoundable{
 
     @Override
     public double getArea() {
-        return 0;
+        return area;
     }
 
     @Override
     public void setArea(double newArea) {
 
+    }
+
+    @Override
+    public String toString() {
+        return shape.toString();
     }
 }
